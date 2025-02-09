@@ -5,18 +5,15 @@ import (
 	"os"
 )
 
-// Config -- конфигурация команды (наличие ключей, файлов)
 type Config struct {
-	SortedColumn int  // номер колонки, по которой сортируем -k
-	NumSort      bool // числовая сортировка -n
-	Reversed     bool // Сортировка в обратном порядке -r
-	Unique       bool // только уникальные строки -u
-
+	SortedColumn int
+	NumSort      bool
+	Reversed     bool
+	Unique       bool
 	InputFile  string
 	OutputFile string
 }
 
-// ParseArgs -- метод, позволяющий собирать конфиг из данных консоли
 func (cfg *Config) ParseArgs() {
 
 	flag.IntVar(&cfg.SortedColumn, "k", 0, "column for sort")
@@ -25,27 +22,21 @@ func (cfg *Config) ParseArgs() {
 	flag.BoolVar(&cfg.Unique, "u", false, "only unique rows")
 	flag.Parse()
 
-
 	if cfg.SortedColumn < 0 {
 		flag.Usage()
 		os.Exit(2)
 	}
-
 	args := flag.Args()
-
-	if len(args) > 2 { // Более двух аргументов -- выход из программы
+	if len(args) > 2 { 
 		flag.Usage()
 		os.Exit(2)
 	}
-
-	if len(args) >= 1 { // Более одного -- добавляем считываемый файл
+	if len(args) >= 1 {
 		cfg.InputFile = args[0]
 	}
-
-	if len(args) == 2 { // Два аргумента -- запись в файл
+	if len(args) == 2 {
 		cfg.OutputFile = args[1]
 	}
-
 	check := func() func(bool) {
 		var f bool
 		return func(b bool) {
@@ -56,6 +47,5 @@ func (cfg *Config) ParseArgs() {
 			f = f || b
 		}
 	}()
-
 	check(cfg.NumSort)
 }

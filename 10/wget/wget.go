@@ -1,14 +1,9 @@
 package wget
 
 import (
-	//"errors"
 	"fmt"
 	"log"
 	"os"
-	//"path"
-//	"strings"
-	//"time"
-
 	"github.com/gocolly/colly"
 )
 

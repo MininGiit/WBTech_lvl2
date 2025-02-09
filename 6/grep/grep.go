@@ -11,35 +11,25 @@ func Check(a, b string, f bool) bool {
 	if f {
 		return a == b
 	}
-
 	return strings.Contains(a, b)
 }
 
 func FindRows(cfg Config) error {
 	file, err := os.Open(cfg.File)
-
 	if err != nil {
 		return err
 	}
-
 	scanner := bufio.NewScanner(file)
-
 	i := 0
-
 	counter := 0
-
 	rowsFlags := make(map[int]bool, 0)
 	rows := make([]string, 0)
-
 	for scanner.Scan() {
 		if _, ok := rowsFlags[i]; !ok {
 			rowsFlags[i] = false
 		}
-
 		line := scanner.Text()
-
 		rows = append(rows, line)
-
 		if Check(line, cfg.ToFind, cfg.Fixed) || (Check(strings.ToLower(line), strings.ToLower(cfg.ToFind), cfg.Fixed) && cfg.IgnoreCase) {
 			if cfg.Before > 0 {
 				for j := 0; j <= cfg.Before; j++ {
@@ -48,13 +38,11 @@ func FindRows(cfg Config) error {
 					}
 				}
 			}
-
 			if cfg.After > 0 {
 				for j := 0; j <= cfg.After; j++ {
 					rowsFlags[i+j] = true
 				}
 			}
-
 			if cfg.Context > 0 {
 				for j := 0; j <= cfg.Context; j++ {
 					rowsFlags[i+j] = true
@@ -64,15 +52,11 @@ func FindRows(cfg Config) error {
 					}
 				}
 			}
-
 			counter++
-
 			rowsFlags[i] = true
-
 		}
 		i++
 	}
-
 	if cfg.Count {
 		fmt.Println(counter)
 	} else {
@@ -82,6 +66,5 @@ func FindRows(cfg Config) error {
 			}
 		}
 	}
-
 	return nil
 }

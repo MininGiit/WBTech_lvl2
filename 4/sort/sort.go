@@ -45,71 +45,51 @@ func readFile(cfg Config) ([][]string, error) {
 
 func writeFile(cfg Config, data [][]string) error {
 	file, err := os.OpenFile(cfg.OutputFile, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-
 	if err != nil {
 		return err
 	}
-
 	defer file.Close()
-
 	for _, val := range data {
 		joinedLine := strings.Join(val, " ") + "\n"
 		file.Write([]byte(joinedLine))
 	}
-
 	return nil
 }
 
 func Sort(cfg Config) error {
-
 	data, err := readFile(cfg) 
-
 	if err != nil {
 		return err
 	}
-
 	sort.Slice(data, func(i, j int) bool {
 		if !cfg.NumSort {
 			if !cfg.Reversed {
 				return data[i][cfg.SortedColumn] < data[j][cfg.SortedColumn]
 			}
-
 			return data[i][cfg.SortedColumn] > data[j][cfg.SortedColumn]
 		}
 		if !cfg.Reversed {
 			val1, err := strconv.Atoi(data[i][cfg.SortedColumn])
-
 			if err != nil {
 				return false
 			}
-
 			val2, err := strconv.Atoi(data[j][cfg.SortedColumn])
-
 			if err != nil {
 				return false
 			}
-
 			return val1 < val2
 		}
-
 		val1, err := strconv.Atoi(data[i][cfg.SortedColumn])
-
 		if err != nil {
 			return false
 		}
-
 		val2, err := strconv.Atoi(data[j][cfg.SortedColumn])
-
 		if err != nil {
 			return false
 		}
-
 		return val1 > val2
-
 	})
-
 	err = writeFile(cfg, data) 
-
 	if err != nil {
 		return err
 	}
